@@ -8,9 +8,9 @@ const routes = [
         component: () => import('../views/home.vue')
     },
     {
-        path: '/reflation1',
-        name: 'reflation1',
-        component: () => import('../views/reflation-1/index.vue')
+        path: '/reflation',
+        name: 'reflation',
+        component: () => import('../views/reflation/index.vue')
     },
     // {
     //     path: '/kanpai',

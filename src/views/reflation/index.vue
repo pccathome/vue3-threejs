@@ -42,7 +42,7 @@ window.addEventListener('resize', () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-camera.position.z = 4.5
+camera.position.set(1.5, -1.5, 4.5)
 scene.add(camera)
 
 // Geometry
@@ -194,7 +194,6 @@ onBeforeUnmount(() => {
     renderer.clear()
     scene.clear()
     camera.clear()
-    // window.removeEventListener('mousemove', onMouseMove, true)
     THREE.Cache.clear()
 })
 </script>
@@ -208,8 +207,9 @@ onBeforeUnmount(() => {
                 href="https://blog.maximeheckel.com/posts/refraction-dispersion-and-other-shader-light-effects/"
                 target="_blank"
                 class="underline-offset-2"
-                >Refraction, dispersion, and other shader light effects</a
             >
+                Refraction
+            </a>
         </footerInfo>
     </div>
 </template>

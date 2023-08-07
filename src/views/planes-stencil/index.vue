@@ -38,8 +38,7 @@ window.addEventListener('resize', () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-camera.position.z = 4
-camera.lookAt(3, 2, 0)
+camera.position.set(2, 2, 4)
 scene.add(camera)
 
 let planes, planeObjects, planeHelpers, object
