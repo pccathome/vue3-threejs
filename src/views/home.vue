@@ -61,22 +61,6 @@
                         </div>
                     </router-link>
                 </div>
-
-                <!-- <div class="shape hover:border-gradient background-animate">
-                    <router-link to="/reflation3">
-                        <div class="shape-inside bg-[#F4F4FD]">
-                            <img class="shape-inside" src="../assets/images/reflation_3.png" />
-                        </div>
-                    </router-link>
-                </div>
-
-                <div class="shape hover:border-gradient background-animate">
-                    <router-link to="/reflation3">
-                        <div class="shape-inside bg-[#F4F4FD]">
-                            <img class="shape-inside" src="../assets/images/reflation_3.png" />
-                        </div>
-                    </router-link>
-                </div> -->
             </section>
         </div>
     </div>
