@@ -5,10 +5,27 @@
     <div class="w-screen h-full">
         <div class="md:w-[800px] mx-auto flex flex-col md:flex-row space-x-0 md:space-x-6 p-4">
             <section class="w-full flex flex-col items-start">
-                <div class="h-[250px] w-full">
+                <div class="md:h-[300px] w-full">
                     <div class="m-10 relative">
                         <span class="text-9xl"> &#128406;</span>
-                        <p class="absolute top-10 right-16 font-thin text-xs text-white">Live long and prosper</p>
+                        <p class="absolute top-10 right-10 md:right-16 font-thin text-xs text-white">
+                            Live long and prosper
+                        </p>
+                        <ul class="flex justify-center items-center gap-12 pt-14">
+                            <li>
+                                <img class="h-6 opacity-50 hover:opacity-100" src="../assets/images/twitter.svg" />
+                            </li>
+                            <li>
+                                <a href="https://github.com/pccathome/vue3-threejs" target="_blank">
+                                    <img class="h-6 opacity-50 hover:opacity-100" src="../assets/images/github.svg" />
+                                </a>
+                            </li>
+                            <li>
+                                <a href="mailto:pccathome@gmail.com">
+                                    <img class="h-6 opacity-50 hover:opacity-100" src="../assets/images/mail.svg" />
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
