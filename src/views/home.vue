@@ -1,5 +1,5 @@
 <script setup>
-// const imageUrl = '../assets/images/bg-1.jpg'
+import date from '../components/date.vue'
 </script>
 <template>
     <div class="w-screen h-full">
@@ -31,61 +31,53 @@
                     </div>
                 </div>
 
-                <div class="shape hover:border-gradient background-animate">
-                    <router-link to="/transmission-cube">
-                        <div class="shape-inside bg-[#F4F4FD]">
-                            <img class="shape-inside" src="../assets/images/reflation_3.png" />
-                        </div>
-                    </router-link>
-                </div>
-
-                <div class="shape hover:border-gradient background-animate">
+                <div class="shape hover:border-gradient background-animate relative">
                     <router-link to="/reflation">
                         <div class="shape-inside bg-black">
                             <img class="shape-inside" src="../assets/images/reflation_1.png" />
                         </div>
+                        <date>2023.08.05</date>
                     </router-link>
                 </div>
 
-                <!-- <div class="shape hover:border-gradient background-animate">
-                    <router-link to="/kanpai">
-                        <div class="shape-inside bg-[#F4F4FD]">
-                            <img class="shape-inside" src="../assets/images/reflation_2.png" />
-                        </div>
-                    </router-link>
-                </div> -->
-            </section>
-
-            <section class="w-full flex flex-col items-start text-white md:mt-40">
-                <div class="shape hover:border-gradient background-animate">
+                <div class="shape hover:border-gradient background-animate relative">
                     <router-link to="/planes-stencil">
                         <div class="shape-inside bg-[#F4F4FD]">
                             <img class="shape-inside" src="../assets/images/plane-stencil.png" />
                         </div>
+                        <date>2023.08.04</date>
                     </router-link>
                 </div>
+            </section>
 
-                <div class="shape hover:border-gradient background-animate">
+            <section class="w-full flex flex-col items-start text-white md:mt-40">
+                <div class="shape hover:border-gradient background-animate relative">
                     <router-link to="/point-gravity">
                         <div class="shape-inside bg-[#F4F4FD]">
                             <img class="shape-inside" src="../assets/images/point-gravity.png" />
                         </div>
+                        <date>2023.07.15</date>
                     </router-link>
                 </div>
 
-                <div class="shape hover:border-gradient background-animate">
+                <div class="shape hover:border-gradient background-animate relative">
                     <router-link to="/center-gravity">
                         <div class="shape-inside bg-[#F4F4FD]">
                             <img class="shape-inside" src="../assets/images/center-gravity.png" />
                         </div>
+                        <date>2023.07.10</date>
+                    </router-link>
+                </div>
+
+                <div class="shape hover:border-gradient background-animate relative">
+                    <router-link to="/transmission-cube">
+                        <div class="shape-inside bg-[#F4F4FD]">
+                            <img class="shape-inside" src="../assets/images/reflation_3.png" />
+                        </div>
+                        <date>2023.07.04</date>
                     </router-link>
                 </div>
             </section>
         </div>
     </div>
 </template>
-<!-- <style>
-.imgSrc {
-    background-image: url('../assets/images/bg-3.jpg');
-}
-</style> -->
