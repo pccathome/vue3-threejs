@@ -13,7 +13,9 @@
                         </p>
                         <ul class="flex justify-center items-center gap-12 pt-14">
                             <li>
-                                <img class="h-6 opacity-50 hover:opacity-100" src="../assets/images/twitter.svg" />
+                                <a href="https://twitter.com/pccathome" target="_blank">
+                                    <img class="h-6 opacity-50 hover:opacity-100" src="../assets/images/twitter.svg" />
+                                </a>
                             </li>
                             <li>
                                 <a href="https://github.com/pccathome/vue3-threejs" target="_blank">
