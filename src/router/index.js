@@ -8,15 +8,15 @@ const routes = [
         component: () => import('../views/home.vue')
     },
     {
+        path: '/3d-noise-bg',
+        name: '3d-noise-bg',
+        component: () => import('../views/3d-noise-bg/index.vue')
+    },
+    {
         path: '/reflation',
         name: 'reflation',
         component: () => import('../views/reflation/index.vue')
     },
-    // {
-    //     path: '/kanpai',
-    //     name: 'kanpai',
-    //     component: () => import('../views/kanpai/index.vue')
-    // },
     {
         path: '//transmission-cube',
         name: '/transmissionCube',

@@ -2,7 +2,6 @@
 import { onMounted, onBeforeUnmount, ref } from 'vue'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 // import Stats from 'three/examples/jsm/libs/stats.module'
 import { useSizes } from '../../threeBase/sizes'
 import { useRenderer } from '../../threeBase/renderer'

@@ -32,6 +32,15 @@ import date from '../components/date.vue'
                 </div>
 
                 <div class="shape hover:border-gradient background-animate relative">
+                    <router-link to="/3d-noise-bg">
+                        <div class="shape-inside bg-black">
+                            <img class="shape-inside" src="../assets/images/3d-noise-bg.png" />
+                        </div>
+                        <date>2023.08.13</date>
+                    </router-link>
+                </div>
+
+                <div class="shape hover:border-gradient background-animate relative">
                     <router-link to="/reflation">
                         <div class="shape-inside bg-black">
                             <img class="shape-inside" src="../assets/images/reflation_1.png" />
