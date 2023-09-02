@@ -32,6 +32,15 @@ import date from '../components/date.vue'
                 </div>
 
                 <div class="shape hover:border-gradient background-animate relative">
+                    <router-link to="/cloud">
+                        <div class="shape-inside bg-black">
+                            <img class="shape-inside" src="../assets/images/cloud.png" />
+                        </div>
+                        <date>2023.09.02</date>
+                    </router-link>
+                </div>
+
+                <div class="shape hover:border-gradient background-animate relative">
                     <router-link to="/3d-noise-bg">
                         <div class="shape-inside bg-black">
                             <img class="shape-inside" src="../assets/images/3d-noise-bg.png" />
@@ -48,7 +57,9 @@ import date from '../components/date.vue'
                         <date>2023.08.05</date>
                     </router-link>
                 </div>
+            </section>
 
+            <section class="w-full flex flex-col items-start text-white md:mt-40">
                 <div class="shape hover:border-gradient background-animate relative">
                     <router-link to="/planes-stencil">
                         <div class="shape-inside bg-[#F4F4FD]">
@@ -57,9 +68,7 @@ import date from '../components/date.vue'
                         <date>2023.08.04</date>
                     </router-link>
                 </div>
-            </section>
 
-            <section class="w-full flex flex-col items-start text-white md:mt-40">
                 <div class="shape hover:border-gradient background-animate relative">
                     <router-link to="/point-gravity">
                         <div class="shape-inside bg-[#F4F4FD]">

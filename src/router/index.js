@@ -8,6 +8,11 @@ const routes = [
         component: () => import('../views/home.vue')
     },
     {
+        path: '/cloud',
+        name: 'cloud',
+        component: () => import('../views/cloud/index.vue')
+    },
+    {
         path: '/3d-noise-bg',
         name: '3d-noise-bg',
         component: () => import('../views/3d-noise-bg/index.vue')
