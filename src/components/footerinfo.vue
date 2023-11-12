@@ -1,6 +1,6 @@
 <template>
-    <div class="absolute bottom-6 ml-5 text-white opacity-50 font-thin text-xs">
-        <p class="">
+    <div class="absolute ml-5 bottom-6">
+        <p class="text-white opacity-50 font-thin text-xs">
             inspired by
             <span class="font-medium">
                 <slot></slot>
