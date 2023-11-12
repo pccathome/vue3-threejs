@@ -25,6 +25,8 @@ const webgl = ref(null)
 
 const world = new CANNON.World()
 world.gravity.set(0, -1, 0)
+world.broadphase = new CANNON.NaiveBroadphase()
+world.allowSleep = true
 
 const scene = new THREE.Scene()
 scene.background = new THREE.Color('#000000')
@@ -106,6 +108,8 @@ for (let x = 0; x < 40; x++) {
     sphereBodies[x].position.x = sphereMeshes[x].position.x
     sphereBodies[x].position.y = sphereMeshes[x].position.y
     sphereBodies[x].position.z = sphereMeshes[x].position.z
+    sphereBodies[x].linearDamping = 0.1 // Damping makes the movement slow down with time
+    sphereBodies[x].angularDamping = 0.1
     world.addBody(sphereBodies[x])
 }
 
@@ -121,7 +125,7 @@ world.addEventListener('postStep', () => {
 
 // mouse
 
-const mGeo = new THREE.SphereGeometry(2, 12, 12)
+const mGeo = new THREE.SphereGeometry(1, 12, 12)
 const matGeo = new THREE.MeshBasicMaterial({ color: 0xffff00 })
 const mouseSphere = new THREE.Mesh(mGeo, matGeo)
 mouseSphere.position.z = 19
@@ -129,7 +133,7 @@ scene.add(mouseSphere)
 
 const mBodies = new CANNON.Body({
     mass: 0,
-    shape: new CANNON.Sphere(2)
+    shape: new CANNON.Sphere(3)
 })
 world.addBody(mBodies)
 
@@ -167,6 +171,8 @@ onMounted(() => {
     controls.minPolarAngle = Math.PI / 2
     controls.maxPolarAngle = Math.PI / 2
     controls.enableZoom = false
+
+    sphereBodies.allowSleep = true
 
     const tick = () => {
         const elapsedTime = clock.getElapsedTime()

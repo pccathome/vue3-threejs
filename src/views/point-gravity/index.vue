@@ -28,12 +28,13 @@ scene.background = new THREE.Color('#000000')
 
 const world = new CANNON.World()
 world.gravity.set(0, -0.001, 0)
+world.broadphase = new CANNON.NaiveBroadphase()
 
-const light = new THREE.AmbientLight(0x404040, 21.5) // soft white light
+const light = new THREE.AmbientLight(0x404040, 9.5) // soft white light
 light.position.set(1, 0, 3)
 scene.add(light)
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8)
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6)
 directionalLight.castShadow = true
 directionalLight.shadow.camera.near = 1
 directionalLight.shadow.camera.far = 50

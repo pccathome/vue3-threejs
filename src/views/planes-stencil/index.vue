@@ -37,7 +37,7 @@ window.addEventListener('resize', () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
-camera.position.set(2, 2, 4)
+camera.position.set(2, 2, 2.5)
 scene.add(camera)
 
 let planes, planeObjects, planeHelpers, object
@@ -173,11 +173,6 @@ onMounted(() => {
     const controls = new OrbitControls(camera, webgl.value)
     controls.enableDamping = true
     controls.enabled = true
-
-    // controls.maxAzimuthAngle = Math.PI / 4
-    // controls.minAzimuthAngle = -Math.PI / 4
-    // controls.minPolarAngle = Math.PI / 2
-    // controls.maxPolarAngle = Math.PI / 2
     controls.enableZoom = false
 
     const tick = () => {

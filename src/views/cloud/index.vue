@@ -65,6 +65,7 @@ bloomPass.renderToScreen = true
 bloomPass.threshold = 0.0
 bloomPass.strength = 3.5
 bloomPass.radius = 0.5
+
 const bloomComposer = new EffectComposer(renderer)
 bloomComposer.setSize(sizes.width, sizes.height)
 bloomComposer.addPass(renderScene)
@@ -86,13 +87,13 @@ const water = new Water(waterGeometry, {
 })
 
 water.rotation.x = -Math.PI / 2
-water.layers.set(0)
+water.layers.set(3)
 scene.add(water)
 
 // Skybox
 const sky = new Sky()
 sky.scale.setScalar(10000)
-sky.layers.set(0)
+sky.layers.set(1)
 scene.add(sky)
 
 const skyUniforms = sky.material.uniforms
@@ -106,6 +107,7 @@ const parameters = {
     elevation: 1.2,
     azimuth: 55
 }
+
 let sun = new THREE.Vector3()
 const pmremGenerator = new THREE.PMREMGenerator(renderer)
 let renderTarget
@@ -126,7 +128,7 @@ const updateSun = () => {
     scene.environment = renderTarget.texture
 }
 
-updateSun()
+// updateSun()
 
 // Cloud Texture
 const size = 230
@@ -184,7 +186,7 @@ const cloudMat = new THREE.RawShaderMaterial({
 const cloudMesh = new THREE.Mesh(cloudGeo, cloudMat)
 cloudMesh.position.set(0, 19, 210)
 cloudMesh.scale.set(35, 43, 35)
-cloudMesh.layers.set(1)
+cloudMesh.layers.set(2)
 scene.add(cloudMesh)
 
 // Line
@@ -218,12 +220,20 @@ onMounted(() => {
 
         controls.update()
 
+        renderer.autoClear = false
         renderer.clear()
-        camera.layers.set(0)
+        // camera.layers.set(0)
+        camera.layers.set(1) // sky
+        // camera.layers.set(3) // water
+
         bloomComposer.render()
 
         renderer.clearDepth()
-        camera.layers.set(1)
+        // camera.layers.set(0)
+        // camera.layers.set(1) // sky
+        camera.layers.set(2) // cloud
+        camera.layers.set(3) // water
+
         renderer.render(scene, camera)
 
         window.requestAnimationFrame(tick)
@@ -246,6 +256,7 @@ onBeforeUnmount(() => {
     scene.clear()
     camera.clear()
     THREE.Cache.clear()
+    bloomComposer.render()
 })
 </script>
 

@@ -12,7 +12,6 @@ import { useRenderer } from '../../threeBase/renderer'
 import { usePerCamera } from '../../threeBase/per-camera'
 // import { gsap } from 'gsap'
 import backBtn from '../../components/backBtn.vue'
-import footerInfo from '../../components/footerInfo.vue'
 
 // FPS
 // const stats = new Stats()
@@ -153,6 +152,5 @@ onBeforeUnmount(() => {
     <div class="relative">
         <div class="outline-none w-full h-full relative" ref="webgl"></div>
         <backBtn />
-        <footerInfo>xxxxx</footerInfo>
     </div>
 </template>

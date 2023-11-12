@@ -1,0 +1,416 @@
+<script setup>
+import { onMounted, onBeforeUnmount, ref } from 'vue'
+// import { useMediaQuery } from '@vueuse/core'
+import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
+import { useSizes } from '../../threeBase/sizes'
+import { useRenderer } from '../../threeBase/renderer'
+import { usePerCamera } from '../../threeBase/per-camera'
+import backBtn from '../../components/backBtn.vue'
+import footerInfo from '../../components/footerinfo.vue'
+// import Stats from 'three/examples/jsm/libs/stats.module'
+import AmmoLib from '../../assets/libs/ammo'
+
+function init() {
+    initGraphics()
+    initPhysics()
+    createObjects()
+}
+
+// FPS
+// const stats = new Stats()
+// document.body.appendChild(stats.dom)
+const webgl = ref(null)
+
+const { sizes } = useSizes()
+const { renderer } = useRenderer()
+const { camera } = usePerCamera()
+
+const scene = new THREE.Scene()
+scene.background = new THREE.Color('#cccccc')
+
+function initGraphics() {
+    window.addEventListener('resize', () => {
+        // Update sizes
+        sizes.width = window.innerWidth
+        sizes.height = window.innerHeight
+
+        // Update camera
+        camera.aspect = sizes.width / sizes.height
+        camera.updateProjectionMatrix()
+
+        // Update renderer
+        renderer.setSize(sizes.width, sizes.height)
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    })
+    renderer.shadowMap.enabled = true
+
+    camera.position.set(0, 0, 23)
+    camera.lookAt(new THREE.Vector3(0, 0, 0))
+    scene.add(camera)
+
+    // Add ambient light
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6)
+    scene.add(ambientLight)
+
+    // Add directional light
+    let dirLightA = new THREE.DirectionalLight(0xffffff, 0.8)
+    dirLightA.position.set(-1, 3, 6)
+    dirLightA.shadow.mapSize.width = 1024
+    dirLightA.shadow.mapSize.height = 1024
+    dirLightA.shadow.camera.near = 6
+    dirLightA.shadow.camera.far = -3
+    scene.add(dirLightA)
+
+    // Add spotLight light
+    let spotLight = new THREE.SpotLight(0xffffff, 290)
+    spotLight.angle = Math.PI / 8
+    spotLight.penumbra = 0.9
+    spotLight.position.set(-2.5, 0.5, 15)
+    spotLight.castShadow = true
+    spotLight.shadow.camera.near = 8
+    spotLight.shadow.camera.far = 30
+    spotLight.shadow.mapSize.width = 1024
+    spotLight.shadow.mapSize.height = 1024
+    scene.add(spotLight)
+}
+
+// Ammojs Initialization
+
+// Physics variables
+const clock = new THREE.Clock()
+let Ammo
+const gravityConstant = 1
+let collisionConfiguration
+let dispatcher
+let broadphase
+let solver
+let softBodySolver
+let physicsWorld
+const rigidBodies = []
+const margin = 0
+let rope
+let transformAux1
+
+const ballMaterial = new THREE.MeshPhongMaterial({ color: 0x202020 })
+
+const pos = new THREE.Vector3()
+const quat = new THREE.Quaternion()
+
+// initialize physics
+function initPhysics() {
+    collisionConfiguration = new Ammo.btSoftBodyRigidBodyCollisionConfiguration()
+    dispatcher = new Ammo.btCollisionDispatcher(collisionConfiguration)
+    broadphase = new Ammo.btDbvtBroadphase()
+    solver = new Ammo.btSequentialImpulseConstraintSolver()
+    softBodySolver = new Ammo.btDefaultSoftBodySolver()
+    physicsWorld = new Ammo.btSoftRigidDynamicsWorld(
+        dispatcher,
+        broadphase,
+        solver,
+        collisionConfiguration,
+        softBodySolver
+    )
+    physicsWorld.setGravity(new Ammo.btVector3(0, gravityConstant, 0))
+    physicsWorld.getWorldInfo().set_m_gravity(new Ammo.btVector3(0, gravityConstant, 0))
+    transformAux1 = new Ammo.btTransform()
+}
+
+function createObjects() {
+    // Wall
+    const geometry = new THREE.PlaneGeometry(10, 10)
+    const material = new THREE.MeshPhongMaterial({ color: '#cccccc' })
+    const wall = new THREE.Mesh(geometry, material)
+    wall.position.z = -10
+    wall.scale.set(10, 10, 10)
+    wall.receiveShadow = true
+    scene.add(wall)
+
+    // Ground
+    pos.set(0, -7, 0)
+    quat.set(0, 0, 0, 1)
+    const groundMass = 0
+    const ground = createParalellepiped(
+        3.5,
+        7,
+        3.5,
+        groundMass,
+        pos,
+        quat,
+        new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: false })
+    )
+
+    ground.castShadow = true
+
+    const GropePos = ground.position.clone()
+
+    function createParalellepiped(sx, sy, sz, mass, pos, quat, material) {
+        const threeObject = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz, 1, 1, 1), material)
+        const shape = new Ammo.btBoxShape(new Ammo.btVector3(sx * 0.5, sy * 0.5, sz * 0.5))
+        shape.setMargin(margin)
+
+        createRigidBody(threeObject, shape, mass, pos, quat)
+
+        return threeObject
+    }
+
+    // Balloon & Rope
+    let balloonMesh = null
+    let balloonChild = null
+
+    const balloonMass = 4
+    const balloonRadius = 2.1
+    const gltfLoader = new GLTFLoader()
+    const hdrEquirect = new RGBELoader()
+
+    hdrEquirect.setPath('/texture/')
+    gltfLoader.setPath('/models/')
+
+    // Balloon
+    hdrEquirect.load('empty_warehouse_01_2k.hdr', (texture) => {
+        texture.mapping = THREE.EquirectangularReflectionMapping
+        gltfLoader.load('balloon.glb', (gltf) => {
+            gltf.scene.traverse(function (node) {
+                if (node.isMesh || node.isLight) node.castShadow = true
+            })
+            balloonMesh = gltf.scene
+            balloonChild = balloonMesh.getObjectByName('balloon')
+            balloonChild.material = new THREE.MeshPhysicalMaterial({
+                color: 0x000000,
+                envMap: texture,
+                envMapIntensity: 1,
+                roughness: 0.1,
+                metalness: 1.15,
+                wireframe: false
+            })
+            balloonMesh.scale.set(2, 2, 2)
+
+            const balloonShape = new Ammo.btSphereShape(balloonRadius)
+            balloonShape.setMargin(margin)
+            pos.set(0, 3, 0)
+            quat.set(0, 0, 0, 1)
+            createRigidBody(balloonMesh, balloonShape, balloonMass, pos, quat)
+            // balloonMesh.userData.physicsBody.setFriction(5)
+
+            // Rope
+            const ropeNumSegments = 20
+            const ropeLength = 4
+            const ropeMass = 1
+            const ropePos = balloonMesh.position.clone()
+            ropePos.y -= balloonRadius
+
+            const segmentLength = ropeLength / ropeNumSegments
+            const ropeGeometry = new THREE.BufferGeometry()
+            const ropeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 })
+            const ropePositions = []
+            const ropeIndices = []
+
+            for (let i = 0; i < ropeNumSegments + 1; i++) {
+                ropePositions.push(ropePos.x, ropePos.y + i * segmentLength, ropePos.z)
+            }
+
+            for (let i = 0; i < ropeNumSegments; i++) {
+                ropeIndices.push(i, i + 1)
+            }
+
+            ropeGeometry.setIndex(new THREE.BufferAttribute(new Uint16Array(ropeIndices), 1))
+            ropeGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(ropePositions), 3))
+            ropeGeometry.computeBoundingSphere()
+            rope = new THREE.LineSegments(ropeGeometry, ropeMaterial)
+            rope.castShadow = true
+            scene.add(rope)
+
+            // Rope physic object
+            const softBodyHelpers = new Ammo.btSoftBodyHelpers()
+            const ropeStart = new Ammo.btVector3(GropePos.x, GropePos.y + 3.2, GropePos.z)
+            const ropeEnd = new Ammo.btVector3(ropePos.x, ropePos.y, ropePos.z)
+
+            const ropeSoftBody = softBodyHelpers.CreateRope(
+                physicsWorld.getWorldInfo(),
+                ropeStart,
+                ropeEnd,
+                ropeNumSegments - 1,
+                0
+            )
+            const sbConfig = ropeSoftBody.get_m_cfg()
+            sbConfig.set_viterations(5)
+            sbConfig.set_piterations(5)
+            ropeSoftBody.setTotalMass(ropeMass, false)
+            Ammo.castObject(ropeSoftBody, Ammo.btCollisionObject)
+                .getCollisionShape()
+                .setMargin(margin * 3)
+            physicsWorld.addSoftBody(ropeSoftBody, 1, -1)
+            rope.userData.physicsBody = ropeSoftBody
+
+            // Disable deactivation
+            ropeSoftBody.setActivationState(4)
+
+            // Glue the rope extremes to the ball and the ground box
+            const influence = 1
+            ropeSoftBody.appendAnchor(0, ground.userData.physicsBody, true, influence)
+            ropeSoftBody.appendAnchor(ropeNumSegments, balloonMesh.userData.physicsBody, true, influence)
+        })
+    })
+}
+
+function createRigidBody(threeObject, physicsShape, mass, pos, quat) {
+    threeObject.position.copy(pos)
+    threeObject.quaternion.copy(quat)
+
+    const transform = new Ammo.btTransform()
+    transform.setIdentity()
+    transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
+    transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w))
+    const motionState = new Ammo.btDefaultMotionState(transform)
+
+    const localInertia = new Ammo.btVector3(0, 0, 0)
+    physicsShape.calculateLocalInertia(mass, localInertia)
+
+    const rbInfo = new Ammo.btRigidBodyConstructionInfo(mass, motionState, physicsShape, localInertia)
+    const body = new Ammo.btRigidBody(rbInfo)
+
+    threeObject.userData.physicsBody = body
+
+    scene.add(threeObject)
+
+    if (mass > 0) {
+        rigidBodies.push(threeObject)
+
+        // Disable deactivation
+        body.setActivationState(4)
+    }
+
+    physicsWorld.addRigidBody(body)
+}
+
+function updatePhysics(deltaTime) {
+    physicsWorld.stepSimulation(deltaTime, 10)
+
+    // Update rope
+    if (rope) {
+        const softBody = rope.userData.physicsBody
+        const ropePositions = rope.geometry.attributes.position.array
+        const numVerts = ropePositions.length / 3
+        const nodes = softBody.get_m_nodes()
+        let indexFloat = 0
+
+        for (let i = 0; i < numVerts; i++) {
+            const node = nodes.at(i)
+            const nodePos = node.get_m_x()
+            ropePositions[indexFloat++] = nodePos.x()
+            ropePositions[indexFloat++] = nodePos.y()
+            ropePositions[indexFloat++] = nodePos.z()
+        }
+
+        rope.geometry.attributes.position.needsUpdate = true
+    }
+
+    // Update rigid bodies
+    for (let i = 0, il = rigidBodies.length; i < il; i++) {
+        const objThree = rigidBodies[i]
+        const objPhys = objThree.userData.physicsBody
+        const ms = objPhys.getMotionState()
+        if (ms) {
+            ms.getWorldTransform(transformAux1)
+            const p = transformAux1.getOrigin()
+            const q = transformAux1.getRotation()
+            objThree.position.set(p.x(), p.y(), p.z())
+            objThree.quaternion.set(q.x(), q.y(), q.z(), q.w())
+        }
+    }
+}
+
+// ------------------------------------------------------------
+
+// input
+
+let clickRequest = false
+window.addEventListener('mousedown', mousedown, false)
+
+function mousedown(e) {
+    if (!clickRequest) {
+        clickRequest = true
+    }
+}
+
+function processClick() {
+    if (clickRequest) {
+        // Creates a ball
+        let ballMass = 0.3
+        let ballRadius = 2.2
+        let sphereGeo = new THREE.SphereGeometry(ballRadius, 18, 16)
+        let ballMesh = new THREE.Mesh(sphereGeo, ballMaterial)
+        let ballShape = new Ammo.btSphereShape(ballRadius)
+        ballShape.setMargin(margin)
+
+        pos.set(-1, 3.5, 0)
+        quat.set(0, 0, 0, 1)
+        let ballBody = createRigidBody(ballMesh, ballShape, ballMass, pos, quat)
+
+        ballMesh.visible = false
+
+        setTimeout(function () {
+            physicsWorld.removeRigidBody(ballBody)
+            scene.remove(ballMesh)
+        }, 200)
+
+        clickRequest = false
+    }
+}
+
+const tick = () => {
+    const deltaTime = clock.getDelta()
+
+    updatePhysics(deltaTime)
+    processClick()
+
+    renderer.render(scene, camera)
+    // stats.update()
+
+    window.requestAnimationFrame(tick)
+}
+
+onMounted(() => {
+    webgl.value.appendChild(renderer.domElement)
+
+    const controls = new OrbitControls(camera, webgl.value)
+    controls.enableDamping = false
+    controls.enabled = false
+    controls.enableZoom = false
+    controls.update()
+
+    // Ammo
+    AmmoLib().then(function (re) {
+        Ammo = re
+        init()
+        tick()
+    })
+})
+
+onBeforeUnmount(() => {
+    scene.remove(rope, camera)
+    renderer.dispose()
+    renderer.domElement = null
+    renderer.clear()
+    scene.clear()
+    camera.clear()
+    THREE.Cache.clear()
+})
+</script>
+
+<template>
+    <div class="relative h-screen w-full">
+        <div class="outline-none w-full h-full absolute z-0" ref="webgl"></div>
+        <backBtn />
+        <footerInfo>
+            <a
+                href="https://gentlemanuniverse.tumblr.com/post/616414085444222976"
+                target="_blank"
+                class="underline-offset-2"
+                >tumblr photo</a
+            >
+        </footerInfo>
+    </div>
+</template>

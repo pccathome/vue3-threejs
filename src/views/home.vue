@@ -32,13 +32,22 @@ import date from '../components/date.vue'
                 </div>
 
                 <div class="shape hover:border-gradient background-animate relative">
+                    <router-link to="/balloon">
+                        <div class="shape-inside bg-black">
+                            <img class="shape-inside" src="../assets/images/balloon.png" />
+                        </div>
+                        <date>2023.11.12</date>
+                    </router-link>
+                </div>
+
+                <!-- <div class="shape hover:border-gradient background-animate relative">
                     <router-link to="/cloud">
                         <div class="shape-inside bg-black">
                             <img class="shape-inside" src="../assets/images/cloud.png" />
                         </div>
                         <date>2023.09.02</date>
                     </router-link>
-                </div>
+                </div> -->
 
                 <div class="shape hover:border-gradient background-animate relative">
                     <router-link to="/3d-noise-bg">
