@@ -327,20 +327,8 @@ function updatePhysics(deltaTime) {
 // input
 
 let clickRequest = false
-window.addEventListener('mousedown', mousedown, false)
-window.addEventListener('touchstart', touchstart, false)
-
-function mousedown(e) {
-    if (!clickRequest) {
-        clickRequest = true
-    }
-}
-
-function touchstart(e) {
-    if (!clickRequest) {
-        clickRequest = true
-    }
-}
+window.addEventListener('mousedown', () => !clickRequest && (clickRequest = true), false)
+window.addEventListener('touchstart', () => !clickRequest && (clickRequest = true), false)
 
 function processClick() {
     if (clickRequest) {
