@@ -7,6 +7,11 @@ const routes = [
         component: () => import('../views/home.vue')
     },
     {
+        path: '/audio-visualiser',
+        name: 'audio-visualiser',
+        component: () => import('../views/audio-visualiser/index.vue')
+    },
+    {
         path: '/liquid-metal',
         name: 'liquid-metal',
         component: () => import('../views/liquid-metal/index.vue')

@@ -32,6 +32,15 @@ import date from '../components/date.vue'
                 </div>
 
                 <div class="shape hover:border-gradient background-animate relative">
+                    <router-link to="/audio-visualiser">
+                        <div class="shape-inside bg-black">
+                            <img class="shape-inside" src="../assets/images/audio-veisualiser.png" />
+                        </div>
+                        <date>2023.12.16</date>
+                    </router-link>
+                </div>
+
+                <div class="shape hover:border-gradient background-animate relative">
                     <router-link to="/liquid-metal">
                         <div class="shape-inside bg-black">
                             <img class="shape-inside" src="../assets/images/liquid-metal.png" />
@@ -57,7 +66,11 @@ import date from '../components/date.vue'
                         <date>2023.08.13</date>
                     </router-link>
                 </div>
+            </section>
 
+            <!------------ ------------>
+
+            <section class="w-full flex flex-col items-start text-white md:mt-40">
                 <div class="shape hover:border-gradient background-animate relative">
                     <router-link to="/reflation">
                         <div class="shape-inside bg-black">
@@ -66,9 +79,7 @@ import date from '../components/date.vue'
                         <date>2023.08.05</date>
                     </router-link>
                 </div>
-            </section>
 
-            <section class="w-full flex flex-col items-start text-white md:mt-40">
                 <div class="shape hover:border-gradient background-animate relative">
                     <router-link to="/planes-stencil">
                         <div class="shape-inside bg-[#F4F4FD]">
