@@ -12,6 +12,7 @@ import VertexShader from './shader/vertext.glsl?raw'
 import FragmentShader from './shader/fragment.glsl?raw'
 import backBtn from '../../components/backBtn.vue'
 import footerInfo from '../../components/footerinfo.vue'
+import loadingIco from '../../components/loadingIco.vue'
 
 import matcap from '/texture/black_cap2.png'
 
@@ -49,12 +50,28 @@ scene.add(camera)
 // audio
 const isPlaying = ref(false)
 const audio = ref(null)
+const loading = ref(true)
+
+const loadingManager = new THREE.LoadingManager(
+    () => {
+        loading.value = false
+        isPlaying.value = false
+    },
+    (file, loaded, total) => {
+        const progress = loaded / total
+        console.log(`Loading audio: ${progress * 100}%`)
+    }
+)
 
 const file = '/audio/knekksans.mp3'
 const fftSize = 256
 const listener = new THREE.AudioListener()
 audio.value = new THREE.Audio(listener)
-const audioLoader = new THREE.AudioLoader()
+const audioLoader = new THREE.AudioLoader(loadingManager)
+
+audioLoader.load(file, function (buffer) {
+    audio.value.setBuffer(buffer)
+})
 
 const togglePlay = () => {
     if (isPlaying.value) {
@@ -65,13 +82,15 @@ const togglePlay = () => {
 }
 
 const playAudio = () => {
-    listener.context.resume().then(() => {
-        audioLoader.load(file, function (buffer) {
-            audio.value.setBuffer(buffer)
+    listener.context
+        .resume()
+        .then(() => {
             audio.value.play()
             isPlaying.value = true
         })
-    })
+        .catch((error) => {
+            console.error('Failed to resume audio context:', error)
+        })
 }
 
 const pauseAudio = () => {
@@ -151,10 +170,14 @@ onBeforeUnmount(() => {
 <template>
     <div class="relative h-screen w-full overflow-hidden">
         <div class="outline-none w-full h-full absolute z-0" ref="webgl"></div>
-        <div class="h-screen inset-0 flex items-center justify-center mt-20 sm:mt-0">
+        <div class="h-screen inset-0 flex items-center justify-center mt-28 sm:mt-0">
+            <div v-if="loading" class="z-10">
+                <loadingIco />
+            </div>
             <button
+                v-else
                 @click="togglePlay"
-                class="border border-zinc-700 rounded-2xl w-16 h-6 sm:w-20 sm:h-8 bg-black hover:bg-gray-300 text-gray-200 hover:text-black opacity-70 font-extralight text-xs"
+                class="border border-zinc-700 rounded-2xl w-16 h-6 sm:w-20 sm:h-8 bg-black hover:bg-gray-900 text-gray-200 opacity-90 font-extralight text-xs"
             >
                 {{ isPlaying ? 'PAUSE' : 'PLAY' }}
             </button>
