@@ -216,13 +216,13 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="relative">
-        <div class="outline-none w-full h-full relative" ref="webgl"></div>
+    <div class="relative h-screen w-full overflow-hidden">
         <backBtn />
         <footerInfo>
             <a href="https://threejs.org/examples/#webgl_clipping_stencil" target="_blank" class="underline-offset-2"
                 >three.js webgl - clipping stencil</a
             >
         </footerInfo>
+        <div class="outline-none w-full h-full z-0" ref="webgl"></div>
     </div>
 </template>

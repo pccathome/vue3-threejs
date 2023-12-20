@@ -10,8 +10,9 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import { useSizes } from '../../threeBase/sizes'
 import { useRenderer } from '../../threeBase/renderer'
 import { usePerCamera } from '../../threeBase/per-camera'
-// import { gsap } from 'gsap'
+import { gsap } from 'gsap'
 import backBtn from '../../components/backBtn.vue'
+import loadingIco from '../../components/loadingIco.vue'
 
 // FPS
 // const stats = new Stats()
@@ -43,6 +44,40 @@ window.addEventListener('resize', () => {
 camera.position.z = 19
 scene.add(camera)
 
+// ------------------------------------------------------------
+// overlay for loading...
+const overlayGeometry = new THREE.PlaneGeometry(2, 2, 1, 1)
+const overlayMaterial = new THREE.ShaderMaterial({
+    transparent: true,
+    uniforms: { uAlpha: { value: 1 } },
+    vertexShader: `
+        void main() {
+            gl_Position = vec4(position, 1.0);
+        }
+    `,
+    fragmentShader: `
+        uniform float uAlpha;
+
+        void main() {
+            gl_FragColor = vec4(0.0, 0.0, 0.0, uAlpha);
+        }
+    `
+})
+const overlay = new THREE.Mesh(overlayGeometry, overlayMaterial)
+scene.add(overlay)
+
+const loading = ref(true)
+const loadingManager = new THREE.LoadingManager(
+    () => {
+        gsap.to(overlayMaterial.uniforms.uAlpha, { duration: 3, value: 0 })
+        loading.value = false
+    },
+    (url, loaded, total) => {
+        const progress = loaded / total
+        console.log(`Loading: ${progress * 100}%`)
+    }
+)
+
 // Font Loader
 const textLoader = new FontLoader()
 let text = null
@@ -70,12 +105,12 @@ textLoader.load('font/Roboto_Bold.json', (font) => {
 })
 
 // Model Loader
-const gltfLoader = new GLTFLoader()
+const gltfLoader = new GLTFLoader(loadingManager)
 
 let cubeMesh = null
 let cubeChild = null
 
-const hdrEquirect = new RGBELoader()
+const hdrEquirect = new RGBELoader(loadingManager)
 hdrEquirect.setPath('/texture/')
 gltfLoader.setPath('/models/')
 hdrEquirect.load('empty_warehouse_01_2k.hdr', (texture) => {
@@ -149,8 +184,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="relative">
-        <div class="outline-none w-full h-full relative" ref="webgl"></div>
+    <div class="relative h-screen w-full overflow-hidden">
+        <div v-if="loading" class="h-screen inset-0 flex items-center justify-center">
+            <loadingIco />
+        </div>
         <backBtn />
+        <div class="outline-none w-full h-screen z-0" ref="webgl"></div>
     </div>
 </template>

@@ -10,8 +10,9 @@ import { useSizes } from '../../threeBase/sizes'
 import { useRenderer } from '../../threeBase/renderer'
 import { usePerCamera } from '../../threeBase/per-camera'
 import * as CANNON from 'cannon-es'
-// import { gsap } from 'gsap'
+import { gsap } from 'gsap'
 import backBtn from '../../components/backBtn.vue'
+import loadingIco from '../../components/loadingIco.vue'
 
 // FPS
 // const stats = new Stats()
@@ -34,15 +35,15 @@ const light = new THREE.AmbientLight(0x404040, 9.5) // soft white light
 light.position.set(1, 0, 3)
 scene.add(light)
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6)
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5)
 directionalLight.castShadow = true
-directionalLight.shadow.camera.near = 1
+directionalLight.shadow.camera.near = 10
 directionalLight.shadow.camera.far = 50
 directionalLight.shadow.camera.top = 10
 directionalLight.shadow.camera.right = 10
 directionalLight.shadow.camera.bottom = -10
 directionalLight.shadow.camera.left = -10
-directionalLight.shadow.radius = 20
+directionalLight.shadow.radius = 10
 directionalLight.position.z = -8
 directionalLight.position.y = 22
 scene.add(directionalLight)
@@ -78,7 +79,41 @@ if (isMobile.value) {
 
 scene.add(camera)
 
-const textureLoader = new THREE.TextureLoader()
+//--------------------------------------------------------------
+// overlay for loading...
+const overlayGeometry = new THREE.PlaneGeometry(2, 2, 1, 1)
+const overlayMaterial = new THREE.ShaderMaterial({
+    transparent: true,
+    uniforms: { uAlpha: { value: 1 } },
+    vertexShader: `
+        void main() {
+            gl_Position = vec4(position, 1.0);
+        }
+    `,
+    fragmentShader: `
+        uniform float uAlpha;
+
+        void main() {
+            gl_FragColor = vec4(0.0, 0.0, 0.0, uAlpha);
+        }
+    `
+})
+const overlay = new THREE.Mesh(overlayGeometry, overlayMaterial)
+scene.add(overlay)
+
+const loading = ref(true)
+const loadingManager = new THREE.LoadingManager(
+    () => {
+        gsap.to(overlayMaterial.uniforms.uAlpha, { duration: 3, value: 0 })
+        loading.value = false
+    },
+    (url, loaded, total) => {
+        const progress = loaded / total
+        console.log(`Loading: ${progress * 100}%`)
+    }
+)
+
+const textureLoader = new THREE.TextureLoader(loadingManager)
 const tX = textureLoader.load('/texture/unsplash.jpg')
 const planeMat = new THREE.MeshStandardMaterial({
     map: tX
@@ -100,7 +135,7 @@ const sphereMeshes = []
 const sphereBodies = []
 const sphereGeometry = new THREE.SphereGeometry(1, 32, 32)
 
-const hdr = new RGBELoader().load('/texture/empty_warehouse_01_2k.hdr', (texture) => {
+const hdr = new RGBELoader(loadingManager).load('/texture/empty_warehouse_01_2k.hdr', (texture) => {
     hdr.mapping = THREE.EquirectangularReflectionMapping
 })
 const material = new THREE.MeshPhysicalMaterial({
@@ -226,8 +261,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="relative">
-        <div id="webgl" class="webgl outline-none w-full h-full relative" ref="webgl"></div>
+    <div class="relative h-screen w-full overflow-hidden">
+        <div v-if="loading" class="z-10 h-screen inset-0 flex items-center justify-center">
+            <loadingIco />
+        </div>
         <backBtn />
+        <div id="webgl" class="webgl outline-none w-full h-screen z-0" ref="webgl"></div>
     </div>
 </template>

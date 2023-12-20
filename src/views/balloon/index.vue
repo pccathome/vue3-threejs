@@ -10,8 +10,10 @@ import { useRenderer } from '../../threeBase/renderer'
 import { usePerCamera } from '../../threeBase/per-camera'
 import backBtn from '../../components/backBtn.vue'
 import footerInfo from '../../components/footerinfo.vue'
+import loadingIco from '../../components/loadingIco.vue'
 // import Stats from 'three/examples/jsm/libs/stats.module'
 import AmmoLib from '../../assets/libs/ammo'
+import { gsap } from 'gsap'
 
 function init() {
     initGraphics()
@@ -76,6 +78,39 @@ function initGraphics() {
     spotLight.shadow.mapSize.height = 1024
     scene.add(spotLight)
 }
+
+// overlay for loading...
+const overlayGeometry = new THREE.PlaneGeometry(2, 2, 1, 1)
+const overlayMaterial = new THREE.ShaderMaterial({
+    transparent: true,
+    uniforms: { uAlpha: { value: 1 } },
+    vertexShader: `
+        void main() {
+            gl_Position = vec4(position, 1.0);
+        }
+    `,
+    fragmentShader: `
+        uniform float uAlpha;
+
+        void main() {
+            gl_FragColor = vec4(0.0, 0.0, 0.0, uAlpha);
+        }
+    `
+})
+const overlay = new THREE.Mesh(overlayGeometry, overlayMaterial)
+scene.add(overlay)
+
+const loading = ref(true)
+const loadingManager = new THREE.LoadingManager(
+    () => {
+        gsap.to(overlayMaterial.uniforms.uAlpha, { duration: 3, value: 0 })
+        loading.value = false
+    },
+    (url, loaded, total) => {
+        const progress = loaded / total
+        console.log(`Loading: ${progress * 100}%`)
+    }
+)
 
 // Ammojs Initialization
 
@@ -162,8 +197,8 @@ function createObjects() {
 
     const balloonMass = 4
     const balloonRadius = 2.1
-    const gltfLoader = new GLTFLoader()
-    const hdrEquirect = new RGBELoader()
+    const gltfLoader = new GLTFLoader(loadingManager)
+    const hdrEquirect = new RGBELoader(loadingManager)
 
     hdrEquirect.setPath('/texture/')
     gltfLoader.setPath('/models/')
@@ -397,6 +432,9 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="relative h-screen w-full">
+        <div v-if="loading" class="z-10 h-screen inset-0 flex items-center justify-center">
+            <loadingIco />
+        </div>
         <div class="outline-none w-full h-full absolute z-0" ref="webgl"></div>
         <backBtn />
         <footerInfo>

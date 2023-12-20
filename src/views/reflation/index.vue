@@ -88,10 +88,10 @@ const material = new THREE.ShaderMaterial({
         uIorB: { value: 1.22 },
 
         uChromaticAberration: { value: 0.45 },
-        uSaturation: { value: 1.15 }, // 1.15
-        uShininess: { value: 8.5 },
-        uDiffuseness: { value: 0.05 },
-        uFresnelPower: { value: 8.0 },
+        uSaturation: { value: 1.11 }, // 1.15
+        uShininess: { value: 18.5 },
+        uDiffuseness: { value: 0.1 },
+        uFresnelPower: { value: 6.0 },
         uLight: { value: new THREE.Vector3(-2.0, 1.0, 1.0) }
     }
 })
@@ -199,8 +199,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="relative">
-        <div class="outline-none w-full h-full relative" ref="webgl"></div>
+    <div class="relative h-screen w-full overflow-hidden">
+        <div class="outline-none w-full h-full z-0" ref="webgl"></div>
         <backBtn />
         <footerInfo>
             <a
