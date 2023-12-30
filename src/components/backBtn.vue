@@ -1,8 +1,8 @@
 <script setup></script>
 
 <template>
-    <router-link to="/">
-        <div class="btn-border-gradient absolute h-hull z-10 top-4 left-4">
+    <div class="btn-border-gradient absolute z-10 top-4 left-4">
+        <router-link to="/">
             <button class="border rounded-full w-11 h-11 bg-white pr-1 flex justify-center items-center">
                 <svg width="10" height="17" viewBox="0 0 10 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -12,6 +12,6 @@
                     />
                 </svg>
             </button>
-        </div>
-    </router-link>
+        </router-link>
+    </div>
 </template>

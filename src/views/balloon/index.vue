@@ -432,10 +432,10 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="relative h-screen w-full">
+        <div class="outline-none w-full h-full absolute z-0" ref="webgl"></div>
         <div v-if="loading" class="z-10 h-screen inset-0 flex items-center justify-center">
             <loadingIco />
         </div>
-        <div class="outline-none w-full h-full absolute z-0" ref="webgl"></div>
         <backBtn />
         <footerInfo>
             <a href="https://www.jirigeller.com/works/happy5.html" target="_blank" class="underline-offset-2"
