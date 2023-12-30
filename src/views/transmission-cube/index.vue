@@ -11,7 +11,7 @@ import { useSizes } from '../../threeBase/sizes'
 import { useRenderer } from '../../threeBase/renderer'
 import { usePerCamera } from '../../threeBase/per-camera'
 import { gsap } from 'gsap'
-import backBtn from '../../components/backBtn.vue'
+import backbtn from '../../components/backBtn.vue'
 import loadingIco from '../../components/loadingIco.vue'
 
 // FPS
@@ -184,11 +184,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="relative h-screen w-full overflow-hidden">
-        <div v-if="loading" class="h-screen inset-0 flex items-center justify-center">
+    <div class="relative top-0 left-0 h-screen w-full overflow-hidden">
+        <div v-if="loading" class="h-screen z-10 inset-0 flex items-center justify-center">
             <loadingIco />
         </div>
-        <backBtn />
-        <div class="outline-none w-full h-screen z-0" ref="webgl"></div>
+        <backbtn />
+        <div class="outline-none top-0 left-0 w-full h-screen z-0" ref="webgl"></div>
     </div>
 </template>

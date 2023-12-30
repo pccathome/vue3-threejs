@@ -438,11 +438,8 @@ onBeforeUnmount(() => {
         <div class="outline-none w-full h-full absolute z-0" ref="webgl"></div>
         <backBtn />
         <footerInfo>
-            <a
-                href="https://gentlemanuniverse.tumblr.com/post/616414085444222976"
-                target="_blank"
-                class="underline-offset-2"
-                >tumblr photo</a
+            <a href="https://www.jirigeller.com/works/happy5.html" target="_blank" class="underline-offset-2"
+                >DUNKELHEIT VII by Jiri Geller</a
             >
         </footerInfo>
     </div>

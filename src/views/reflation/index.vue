@@ -1,13 +1,14 @@
 <script setup>
 import { onMounted, onBeforeUnmount, ref } from 'vue'
 import * as THREE from 'three'
+
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 // import Stats from 'three/examples/jsm/libs/stats.module'
-import { useSizes } from '../../threeBase/sizes'
 import { useRenderer } from '../../threeBase/renderer'
 import { usePerCamera } from '../../threeBase/per-camera'
 import { gsap } from 'gsap'
+
 import VertexShader from './shader/vertext.glsl?raw'
 import FragmentShader from './shader/fragment.glsl?raw'
 import backBtn from '../../components/backBtn.vue'
@@ -16,34 +17,25 @@ import footerInfo from '../../components/footerinfo.vue'
 // FPS
 // const stats = new Stats()
 // document.body.appendChild(stats.dom)
+const webgl = ref(null)
 
-// const goBack = $router.back()
-const { sizes } = useSizes()
 const { renderer } = useRenderer()
 const { camera } = usePerCamera()
 
-const webgl = ref(null)
-
 const scene = new THREE.Scene()
-// scene.background = new THREE.Color('#f6f6f6')
 scene.background = new THREE.Color('#000000')
+camera.position.set(1.5, -1.5, 5.5)
+scene.add(camera)
 
 window.addEventListener('resize', () => {
-    // Update sizes
-    sizes.width = window.innerWidth
-    sizes.height = window.innerHeight
-
     // Update camera
-    camera.aspect = sizes.width / sizes.height
+    camera.aspect = window.innerWidth / window.innerHeight
     camera.updateProjectionMatrix()
 
     // Update renderer
-    renderer.setSize(sizes.width, sizes.height)
+    renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
-
-camera.position.set(1.5, -1.5, 4.5)
-scene.add(camera)
 
 // Geometry
 const sphereGeometry = new THREE.SphereGeometry(0.33, 32, 32)
@@ -77,7 +69,9 @@ const material = new THREE.ShaderMaterial({
         cameraPosition: { value: camera.position },
         uTexture: { value: null },
         winResolution: {
-            value: new THREE.Vector2(sizes.width, sizes.height).multiplyScalar(Math.min(window.devicePixelRatio, 2))
+            value: new THREE.Vector2(window.innerWidth, window.innerHeight).multiplyScalar(
+                Math.min(window.devicePixelRatio, 2)
+            )
         },
 
         uIorY: { value: 1.16 },
@@ -110,31 +104,19 @@ tl.to(mesh2.rotation, {
     y: Math.PI * 1
 })
 
-// const onMouseMove = (e) => {
-//     const x = e.clientX
-//     const y = e.clientY
-
-//     gsap.to(mesh1.rotation, {
-//         y: gsap.utils.mapRange(0, window.innerWidth, 0.5, -0.5, x),
-//         x: gsap.utils.mapRange(0, window.innerHeight, 0.5, -0.5, y)
-//     })
-// }
-// window.addEventListener('mousemove', onMouseMove, false)
-
-// Render Target
 const mainRenderTarget = new THREE.WebGLRenderTarget(
-    sizes.height * Math.min(window.devicePixelRatio, 2),
-    sizes.width * Math.min(window.devicePixelRatio, 2)
+    window.innerHeight * Math.min(window.devicePixelRatio, 2),
+    window.innerWidth * Math.min(window.devicePixelRatio, 2)
 )
 
 const backRenderTarget = new THREE.WebGLRenderTarget(
-    sizes.height * Math.min(window.devicePixelRatio, 2),
-    sizes.width * Math.min(window.devicePixelRatio, 2)
+    window.innerHeight * Math.min(window.devicePixelRatio, 2),
+    window.innerWidth * Math.min(window.devicePixelRatio, 2)
 )
 
 onMounted(() => {
     webgl.value.appendChild(renderer.domElement)
-    const clock = new THREE.Clock()
+
     const controls = new OrbitControls(camera, webgl.value)
     controls.enableDamping = true
     controls.enabled = true

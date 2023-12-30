@@ -1,7 +1,7 @@
 import * as THREE from 'three'
-// import { useSizes } from './sizes'
+import { useSizes } from './sizes'
 export const useOrtCamera = () => {
-    // const { sizes } = useSizes()
+    const { sizes } = useSizes()
     let frustumSize = 1
     const camera = new THREE.OrthographicCamera(
         frustumSize / -2,

@@ -1,23 +1,20 @@
 import { useSizes } from './sizes'
 import { useRenderer } from './renderer'
 export const useRsize = () => {
-    const updateSize = () => {
+    const resizes = () => {
         const { sizes } = useSizes()
         const { renderer } = useRenderer()
         //Update sizes
-        sizes.width = window.innerWidth
-        sizes.height = window.innerHeight
+        window.addEventListener('resize', () => {
+            // Update camera
+            camera.aspect = sizes.width / sizes.height
+            camera.updateProjectionMatrix()
 
-        // Update camera
-        camera.aspect = sizes.width / sizes.height
-        camera.updateProjectionMatrix()
-
-        // Update renderer
-        renderer.setSize(sizes.width, sizes.height)
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+            // Update renderer
+            renderer.setSize(sizes.width, sizes.height)
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+        })
     }
 
-    // window.addEventListener('resize', updateSize)
-
-    return { updateSize }
+    return { resizes }
 }

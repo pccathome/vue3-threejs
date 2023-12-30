@@ -1,5 +1,5 @@
 <template>
-    <div class="absolute w-full ml-5 bottom-6">
+    <div class="absolute w-auto ml-5 bottom-24 sm:bottom-6">
         <p class="text-white opacity-50 font-thin text-xs">
             inspired by
             <span class="font-medium">

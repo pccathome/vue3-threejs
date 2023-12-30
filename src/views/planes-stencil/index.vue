@@ -160,7 +160,7 @@ const boxG = new THREE.BoxGeometry()
 const BoxObject = new THREE.Mesh(boxG, new THREE.MeshBasicMaterial())
 BoxObject.scale.set(1.1, 1.1, 1.1)
 const box = new THREE.BoxHelper(BoxObject)
-box.material.color.setHex(0x474747)
+box.material.color.setHex(0x797979)
 box.material.blending = THREE.AdditiveBlending
 box.material.transparent = true
 scene.add(box)
