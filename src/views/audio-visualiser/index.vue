@@ -184,12 +184,15 @@ onBeforeUnmount(() => {
         </div>
         <backBtn />
         <footerInfo>
-            <a
-                href="https://www.youtube.com/watch?v=3OKPA8ne57A&ab_channel=RayFerrofluid"
-                target="_blank"
-                class="underline-offset-2"
-                >Ferrofluid Speaker Audio Visualizer.
-            </a>
+            <template v-slot:first></template>
+            <template v-slot:second>
+                <a
+                    href="https://www.youtube.com/watch?v=3OKPA8ne57A&ab_channel=RayFerrofluid"
+                    target="_blank"
+                    class="underline-offset-2"
+                    >Ferrofluid Speaker Audio Visualizer.
+                </a>
+            </template>
         </footerInfo>
     </div>
 </template>

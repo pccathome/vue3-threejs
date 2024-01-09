@@ -438,9 +438,12 @@ onBeforeUnmount(() => {
         </div>
         <backBtn />
         <footerInfo>
-            <a href="https://www.jirigeller.com/works/happy5.html" target="_blank" class="underline-offset-2"
-                >DUNKELHEIT VII by Jiri Geller</a
-            >
+            <template v-slot:first></template>
+            <template v-slot:second>
+                <a href="https://www.jirigeller.com/works/happy5.html" target="_blank" class="underline-offset-2"
+                    >DUNKELHEIT VII by Jiri Geller</a
+                >
+            </template>
         </footerInfo>
     </div>
 </template>

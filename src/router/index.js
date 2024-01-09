@@ -7,6 +7,11 @@ const routes = [
         component: () => import('../views/home.vue')
     },
     {
+        path: '/chinese-dragon',
+        name: 'chinese-dragon',
+        component: () => import('../views/chinese-dragon/index.vue')
+    },
+    {
         path: '/audio-visualiser',
         name: 'audio-visualiser',
         component: () => import('../views/audio-visualiser/index.vue')

@@ -185,13 +185,16 @@ onBeforeUnmount(() => {
         <div class="outline-none w-full h-full z-0" ref="webgl"></div>
         <backBtn />
         <footerInfo>
-            <a
-                href="https://blog.maximeheckel.com/posts/refraction-dispersion-and-other-shader-light-effects/"
-                target="_blank"
-                class="underline-offset-2"
-            >
-                Refraction
-            </a>
+            <template v-slot:first></template>
+            <template v-slot:second>
+                <a
+                    href="https://blog.maximeheckel.com/posts/refraction-dispersion-and-other-shader-light-effects/"
+                    target="_blank"
+                    class="underline-offset-2"
+                >
+                    Refraction
+                </a>
+            </template>
         </footerInfo>
     </div>
 </template>

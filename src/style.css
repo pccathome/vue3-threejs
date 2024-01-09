@@ -35,4 +35,13 @@
             background-position: 100% 50%;
         }
     }
+    @layer components {
+        .btn {
+            @apply w-16 h-16 opacity-50 rounded-full border-solid border border-white pointer-events-none flex items-center justify-center;
+        }
+
+        .active_btn {
+            @apply border-red-600 border-2;
+        }
+    }
 }

@@ -133,16 +133,19 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="relative h-screen w-full">
-        <div class="outline-none w-full h-full absolute z-0" ref="webgl"></div>
+    <div class="relative outline-none h-screen w-full select-none">
+        <div class="outline-none select-none w-full h-full absolute z-0" ref="webgl"></div>
         <backBtn />
         <footerInfo>
-            <a
-                href="https://www.youtube.com/watch?v=q2WcGi3Cr9w&ab_channel=YuriArtiukh"
-                target="_blank"
-                class="underline-offset-2"
-                >Yuri Artiukh: Raymarching simple scene</a
-            >
+            <template v-slot:first></template>
+            <template v-slot:second>
+                <a
+                    href="https://www.youtube.com/watch?v=q2WcGi3Cr9w&ab_channel=YuriArtiukh"
+                    target="_blank"
+                    class="underline-offset-2"
+                    >Yuri Artiukh: Raymarching simple scene</a
+                >
+            </template>
         </footerInfo>
     </div>
 </template>

@@ -30,6 +30,14 @@ import date from '../components/date.vue'
                         </ul>
                     </div>
                 </div>
+                <div class="shape hover:border-gradient background-animate relative">
+                    <router-link to="/chinese-dragon">
+                        <div class="shape-inside bg-black">
+                            <img class="shape-inside" src="../assets/images/chinese-dragon.png" />
+                        </div>
+                        <date>2024.01.10</date>
+                    </router-link>
+                </div>
 
                 <div class="shape hover:border-gradient background-animate relative">
                     <router-link to="/audio-visualiser">
