@@ -12,6 +12,7 @@ import { useRenderer } from '../../threeBase/renderer'
 import { usePerCamera } from '../../threeBase/per-camera'
 import { gsap } from 'gsap'
 import backbtn from '../../components/backBtn.vue'
+import pageWrap from '../../components/pagewrap.vue'
 import loadingIco from '../../components/loadingIco.vue'
 
 // FPS
@@ -109,11 +110,13 @@ const gltfLoader = new GLTFLoader(loadingManager)
 
 let cubeMesh = null
 let cubeChild = null
+let hdrTexture
 
 const hdrEquirect = new RGBELoader(loadingManager)
 hdrEquirect.setPath('/texture/')
 gltfLoader.setPath('/models/')
 hdrEquirect.load('empty_warehouse_01_2k.hdr', (texture) => {
+    hdrTexture = texture
     texture.mapping = THREE.EquirectangularReflectionMapping
 
     gltfLoader.load('cube.glb', (gltf) => {
@@ -170,6 +173,28 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+    if (cubeMesh) {
+        scene.remove(cubeMesh)
+        // 遍歷cubeMesh的所有子元素並釋放幾何體和材質
+        cubeMesh.traverse((child) => {
+            if (child.isMesh) {
+                child.geometry.dispose() // 釋放幾何體
+
+                if (child.material.isMaterial) {
+                    disposeMaterial(child.material) // 清理材質
+                } else if (Array.isArray(child.material)) {
+                    // 對於有多個材質的情況
+                    child.material.forEach(disposeMaterial)
+                }
+            }
+        })
+    }
+
+    // 清理HDR紋理
+    if (hdrTexture) {
+        hdrTexture.dispose()
+    }
+
     scene.remove(cubeMesh)
     scene.remove(text)
     renderer.forceContextLoss()
@@ -181,14 +206,26 @@ onBeforeUnmount(() => {
 
     THREE.Cache.clear()
 })
+
+function disposeMaterial(material) {
+    material.dispose() // 釋放材質本身
+
+    // 釋放材質中的紋理
+    for (const key of Object.keys(material)) {
+        const value = material[key]
+        if (value && typeof value === 'object' && 'minFilter' in value) {
+            value.dispose()
+        }
+    }
+}
 </script>
 
 <template>
-    <div class="relative top-0 left-0 h-screen w-full overflow-hidden">
+    <pageWrap>
         <div v-if="loading" class="h-screen z-10 inset-0 flex items-center justify-center">
             <loadingIco />
         </div>
         <backbtn />
         <div class="outline-none top-0 left-0 w-full h-screen z-0" ref="webgl"></div>
-    </div>
+    </pageWrap>
 </template>

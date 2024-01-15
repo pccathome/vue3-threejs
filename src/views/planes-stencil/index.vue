@@ -9,6 +9,7 @@ import { usePerCamera } from '../../threeBase/per-camera'
 // import { gsap } from 'gsap'
 import backBtn from '../../components/backBtn.vue'
 import footerInfo from '../../components/footerinfo.vue'
+import pageWrap from '../../components/pagewrap.vue'
 
 // FPS
 // const stats = new Stats()
@@ -216,7 +217,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="relative h-screen w-full overflow-hidden">
+    <pageWrap>
         <backBtn />
         <footerInfo>
             <template v-slot:first></template>
@@ -230,5 +231,5 @@ onBeforeUnmount(() => {
             </template>
         </footerInfo>
         <div class="outline-none w-full h-full z-0" ref="webgl"></div>
-    </div>
+    </pageWrap>
 </template>

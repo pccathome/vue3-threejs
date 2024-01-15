@@ -13,6 +13,7 @@ import VertexShader from './shader/vertext.glsl?raw'
 import FragmentShader from './shader/fragment.glsl?raw'
 import backBtn from '../../components/backBtn.vue'
 import footerInfo from '../../components/footerinfo.vue'
+import pageWrap from '../../components/pagewrap.vue'
 
 // FPS
 // const stats = new Stats()
@@ -181,7 +182,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="relative h-screen w-full overflow-hidden">
+    <pageWrap>
         <div class="outline-none w-full h-full z-0" ref="webgl"></div>
         <backBtn />
         <footerInfo>
@@ -196,5 +197,5 @@ onBeforeUnmount(() => {
                 </a>
             </template>
         </footerInfo>
-    </div>
+    </pageWrap>
 </template>

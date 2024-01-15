@@ -12,6 +12,7 @@ import VertexShader from './shader/vertext.glsl?raw'
 import FragmentShader from './shader/fragment.glsl?raw'
 import backBtn from '../../components/backBtn.vue'
 import footerInfo from '../../components/footerinfo.vue'
+import pageWrap from '../../components/pagewrap.vue'
 
 import matcap from '/texture/steel_matcap.jpg'
 
@@ -122,18 +123,24 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-    scene.remove(plane, camera)
-    renderer.dispose()
-    renderer.domElement = null
-    renderer.clear()
-    scene.clear()
-    camera.clear()
-    THREE.Cache.clear()
+    window.removeEventListener('resize', () => {})
+    document.removeEventListener('mousemove', mouseMove)
+    document.removeEventListener('touchmove', touchMove, { passive: false })
+    scene.remove(plane, camera) // 移除場景中的物體
+    renderer.forceContextLoss() // 釋放WebGL上下文
+    renderer.dispose() // 清理渲染器
+    material.dispose() // 清理材質
+    geometry.dispose() // 清理幾何體
+    renderer.domElement = null // 移除參考
+    renderer.clear() // 清理渲染器相關緩存
+    scene.clear() // 清理場景
+    camera.clear() // 如果有這個方法，清理相機
+    THREE.Cache.clear() // 清理Three.js的緩存
 })
 </script>
 
 <template>
-    <div class="relative outline-none h-screen w-full select-none">
+    <pageWrap>
         <div class="outline-none select-none w-full h-full absolute z-0" ref="webgl"></div>
         <backBtn />
         <footerInfo>
@@ -147,5 +154,5 @@ onBeforeUnmount(() => {
                 >
             </template>
         </footerInfo>
-    </div>
+    </pageWrap>
 </template>

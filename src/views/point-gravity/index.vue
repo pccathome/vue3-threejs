@@ -12,6 +12,7 @@ import { usePerCamera } from '../../threeBase/per-camera'
 import * as CANNON from 'cannon-es'
 import { gsap } from 'gsap'
 import backBtn from '../../components/backBtn.vue'
+import pageWrap from '../../components/pagewrap.vue'
 import loadingIco from '../../components/loadingIco.vue'
 
 // FPS
@@ -148,6 +149,7 @@ const material = new THREE.MeshPhysicalMaterial({
     metalness: 0,
     thickness: 2.2
 })
+
 const sphereMesh = new THREE.Mesh(sphereGeometry, material)
 
 let i = 0
@@ -243,6 +245,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     scene.remove(planeMesh, light, directionalLight, directionalLightCameraHelper)
+
     world.removeBody(sphereBodies, planeBody)
     sphereMeshes.length = 0
     sphereBodies.length = 0
@@ -261,11 +264,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="relative h-screen w-full overflow-hidden">
+    <pageWrap>
         <div v-if="loading" class="z-10 h-screen inset-0 flex items-center justify-center">
             <loadingIco />
         </div>
         <backBtn />
         <div id="webgl" class="webgl outline-none w-full h-screen z-0" ref="webgl"></div>
-    </div>
+    </pageWrap>
 </template>

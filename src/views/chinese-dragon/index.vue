@@ -6,6 +6,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 // import Stats from 'three/examples/jsm/libs/stats.module'
 import { useSizes } from '../../threeBase/sizes'
 import { useRenderer } from '../../threeBase/renderer'
+import pageWrap from '../../components/pageWrap.vue'
 import backBtn from '../../components/backBtn.vue'
 import footerInfo from '../../components/footerinfo.vue'
 import loadingIco from '../../components/loadingIco.vue'
@@ -88,7 +89,7 @@ function init() {
             dragon = gltf.scene.children[0]
             dragon.scale.set(1.4, 1.4, 1.4)
             dragon.rotation.x = 1.3
-            dragon.position.y = 0
+            dragon.position.y = 0.05
             dragon.position.z = -0.05
 
             let m = new THREE.MeshStandardMaterial({
@@ -257,25 +258,90 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-    // scene.remove(plane, camera)
-    renderer.dispose()
-    renderer.domElement = null
-    renderer.clear()
-    scene.clear()
-    camera.clear()
-    THREE.Cache.clear()
+    if (init.envMap) {
+        // 遍歷模型的每個部分並釋放資源
+        gltf.scene.traverse((object) => {
+            if (!object.isMesh) return
+
+            object.geometry.dispose() // 釋放幾何體
+
+            if (object.material.isMaterial) {
+                cleanMaterial(object.material) // 清理材質
+            } else {
+                // 對於多材質的情況
+                for (const material of object.material) {
+                    cleanMaterial(material)
+                }
+            }
+        })
+    }
+
+    function cleanMaterial(material) {
+        material.dispose() // 釋放材質本身
+
+        // 釋放材質中的紋理
+        for (const key of Object.keys(material)) {
+            const value = material[key]
+            if (value && typeof value === 'object' && 'minFilter' in value) {
+                value.dispose()
+            }
+        }
+    }
+
+    // window.removeEventListener('resize', myEventHandler)
+    window.removeEventListener('mousedown', () => {
+        tl.play()
+    })
+
+    window.removeEventListener('mouseup', () => {
+        tl.reverse()
+    })
+
+    window.removeEventListener('touchstart', () => {
+        tl.play()
+    })
+
+    window.removeEventListener('touchend', () => {
+        tl.reverse()
+    })
+
+    window.removeEventListener('mousemove', (e) => {
+        xTo(e.clientX)
+        yTo(e.clientY)
+    })
+
+    document.removeEventListener('mousedown', () => {
+        holdBtn.classList.add('active_btn')
+    })
+    document.removeEventListener('mouseup', () => {
+        holdBtn.classList.remove('active_btn')
+    })
+
+    scene.remove(init.envMa) // 移除場景中的物體
+    renderer.forceContextLoss() // 釋放WebGL上下文
+    renderer.dispose() // 清理渲染器
+    dragon.material.dispose() // 清理材質
+    // geo.dispose() // 清理幾何體
+    renderer.domElement = null // 移除參考
+    renderer.clear() // 清理渲染器相關緩存
+    scene.clear() // 清理場景
+    camera.clear() // 如果有這個方法，清理相機
+    THREE.Cache.clear() // 清理Three.js的緩存
 })
 </script>
 
 <template>
-    <div class="relative outline-none h-screen w-full overflow-hidden select-none">
-        <div class="outline-none w-full h-full absolute z-0 select-none" ref="webgl"></div>
-
+    <pageWrap>
+        <div class="block md:hidden select-none">
+            <div class="fixed z-40 flex justify-center items-center w-full h-[300px]">
+                <p class="text-white opacity-50 text-center text-[9px] leading-3">TOUCH & HOLD</p>
+            </div>
+        </div>
         <div v-if="loading" class="select-none z-10 h-screen inset-0 flex items-center justify-center">
             <loadingIco />
         </div>
         <div class="hidden md:block select-none">
-            <div class="flair fixed z-10 btn">
+            <div class="flair z-40 btn">
                 <p class="text-white text-center text-[9px] leading-3">
                     CLICK<br />
                     & <br />HOLD
@@ -283,11 +349,8 @@ onBeforeUnmount(() => {
             </div>
         </div>
 
-        <div class="block md:hidden select-none">
-            <div class="z-50 absolute flex justify-center items-center w-full h-[400px]">
-                <p class="text-white text-center text-[9px] leading-3">CLICK & HOLD</p>
-            </div>
-        </div>
+        <div class="outline-none w-full h-full z-0 select-none" ref="webgl"></div>
+
         <backBtn />
         <footerInfo>
             <template v-slot:first> 3D Model by </template>
@@ -300,5 +363,5 @@ onBeforeUnmount(() => {
                 </a>
             </template>
         </footerInfo>
-    </div>
+    </pageWrap>
 </template>

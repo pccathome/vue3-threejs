@@ -11,6 +11,7 @@ import { useOrtCamera } from '../../threeBase/ort-camera'
 import VertexShader from './shader/vertext.glsl?raw'
 import FragmentShader from './shader/fragment.glsl?raw'
 import backBtn from '../../components/backBtn.vue'
+import pageWrap from '../../components/pagewrap.vue'
 import footerInfo from '../../components/footerinfo.vue'
 import loadingIco from '../../components/loadingIco.vue'
 
@@ -153,22 +154,30 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-    scene.remove(plane, camera)
-    renderer.dispose()
-    renderer.domElement = null
-    renderer.clear()
-    scene.clear()
-    camera.clear()
-    THREE.Cache.clear()
+    scene.remove(plane, camera) // 移除場景中的物體
+    renderer.forceContextLoss() // 釋放WebGL上下文
+    renderer.dispose() // 清理渲染器
+    material.dispose() // 清理材質
+    geometry.dispose() // 清理幾何體
+    renderer.domElement = null // 移除參考
+    renderer.clear() // 清理渲染器相關緩存
+    scene.clear() // 清理場景
+    camera.clear() // 如果有這個方法，清理相機
+    THREE.Cache.clear() // 清理Three.js的緩存
 
-    audio.value.stop()
-    audio.value.buffer = null
-    listener.remove(audio.value)
+    if (audio.value) {
+        audio.value.stop() // 停止音頻播放
+        audio.value.disconnect() // 斷開音頻連接
+        // audio.value = null // 釋放對音頻對象的引用
+        audio.value.buffer = null
+        listener.remove(audio.value)
+    }
 })
 </script>
 
 <template>
-    <div class="relative h-screen w-full overflow-hidden">
+    <!-- <div class="relative h-screen w-full overflow-hidden"> -->
+    <pageWrap>
         <div class="outline-none w-full h-full absolute z-0" ref="webgl"></div>
         <div class="h-screen inset-0 flex items-center justify-center mt-28 sm:mt-0">
             <div v-if="loading" class="z-10">
@@ -194,5 +203,6 @@ onBeforeUnmount(() => {
                 </a>
             </template>
         </footerInfo>
-    </div>
+    </pageWrap>
+    <!-- </div> -->
 </template>

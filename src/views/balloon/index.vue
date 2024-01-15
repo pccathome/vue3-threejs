@@ -10,6 +10,7 @@ import { useRenderer } from '../../threeBase/renderer'
 import { usePerCamera } from '../../threeBase/per-camera'
 import backBtn from '../../components/backBtn.vue'
 import footerInfo from '../../components/footerinfo.vue'
+import pageWrap from '../../components/pagewrap.vue'
 import loadingIco from '../../components/loadingIco.vue'
 // import Stats from 'three/examples/jsm/libs/stats.module'
 import AmmoLib from '../../assets/libs/ammo'
@@ -420,22 +421,47 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-    scene.remove(rope, camera)
-    renderer.dispose()
-    renderer.domElement = null
-    renderer.clear()
-    scene.clear()
-    camera.clear()
-    THREE.Cache.clear()
+    if (ballMaterial.gltf) {
+        // 遍歷模型的每個部分並釋放資源
+        gltf.scene.traverse((object) => {
+            if (!object.isMesh) return
+
+            object.geometry.dispose() // 釋放幾何體
+
+            if (object.material.isMaterial) {
+                cleanMaterial(object.material) // 清理材質
+            } else {
+                // 對於多材質的情況
+                for (const material of object.material) {
+                    cleanMaterial(material)
+                }
+            }
+        })
+    }
+
+    window.removeEventListener('mousedown', () => !clickRequest && (clickRequest = true), false)
+    window.removeEventListener('touchstart', () => !clickRequest && (clickRequest = true), false)
+    scene.remove(rope, overlay) // 移除場景中的物體
+    renderer.forceContextLoss() // 釋放WebGL上下文
+    renderer.dispose() // 清理渲染器
+    overlayMaterial.dispose() // 清理材質
+    overlayGeometry.dispose() // 清理幾何體
+    ballMaterial.dispose()
+    renderer.domElement = null // 移除參考
+    renderer.clear() // 清理渲染器相關緩存
+    scene.clear() // 清理場景
+    camera.clear() // 如果有這個方法，清理相機
+    THREE.Cache.clear() // 清理Three.js的緩存
 })
 </script>
 
 <template>
-    <div class="relative h-screen w-full">
-        <div class="outline-none w-full h-full absolute z-0" ref="webgl"></div>
+    <pageWrap>
         <div v-if="loading" class="z-10 h-screen inset-0 flex items-center justify-center">
             <loadingIco />
         </div>
+        <div class="outline-none w-full h-full absolute z-0" ref="webgl"></div>
+
         <backBtn />
         <footerInfo>
             <template v-slot:first></template>
@@ -445,5 +471,5 @@ onBeforeUnmount(() => {
                 >
             </template>
         </footerInfo>
-    </div>
+    </pageWrap>
 </template>

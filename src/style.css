@@ -1,9 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=Libre+Barcode+39&family=Roboto+Mono:wght@100;300&family=Roboto:wght@400;500;700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Libre+Barcode+39&family=Roboto+Mono:wght@100;300&family=Roboto:wght@400;500;700&display=swap'); */
+@font-face {
+    font-family: 'neue-hass-bold';
+    src: url('./assets/font/neue-haas-display-bold-3a6387a8.woff2');
+    font-family: 'neue-hass-roman';
+    src: url('./assets/font/neue-haas-display-roman-866931f4.woff2');
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer components {
+    .element {
+        -webkit-animation: rotate 1s linear infinite;
+        -moz-animation: rotate 1s linear infinite;
+        animation: rotate 1s linear infinite;
+        animation-delay: 1s;
+    }
+
+    @keyframes rotate {
+        0% {
+            transform: rotate(30deg);
+        }
+        50% {
+            transform: rotate(-30deg);
+        }
+        100% {
+            transform: rotate(30deg);
+        }
+    }
     .head {
         @apply border border-[#2f2f2f] rounded-2xl w-full my-3;
     }
@@ -22,11 +46,11 @@
     .background-animate {
         background-size: 300%;
 
-        -webkit-animation: AnimationName 3s ease infinite;
-        -moz-animation: AnimationName 3s ease infinite;
-        animation: AnimationName 3s ease infinite;
+        -webkit-animation: AnimationBorder 3s ease infinite;
+        -moz-animation: AnimationBorder 3s ease infinite;
+        animation: AnimationBorder 3s ease infinite;
     }
-    @keyframes AnimationName {
+    @keyframes AnimationBorder {
         0%,
         100% {
             background-position: 0% 50%;

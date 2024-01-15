@@ -11,6 +11,7 @@ import { usePerCamera } from '../../threeBase/per-camera'
 import VertexShader from './shader/vertext.glsl?raw'
 import FragmentShader from './shader/fragment.glsl?raw'
 import backBtn from '../../components/backBtn.vue'
+import pageWrap from '../../components/pageWrap.vue'
 
 // FPS
 // const stats = new Stats()
@@ -130,14 +131,14 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="relative h-screen w-full">
+    <pageWrap>
         <div class="outline-none w-full h-full absolute z-0" ref="webgl"></div>
-        <div class="absolute w-full h-screen flex items-center justify-center z-4">
+        <div class="absolute w-full h-screen flex items-center justify-center z-40">
             <div class="text-center text-white font-Noto">
                 <h1 class="text-3xl md:text-5xl font-semibold">pccathome.dev</h1>
                 <p class="text-xs md:text-sm mt-5">- GLSL textureless classic 3D noise -</p>
             </div>
         </div>
         <backBtn />
-    </div>
+    </pageWrap>
 </template>

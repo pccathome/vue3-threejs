@@ -1,9 +1,9 @@
 <script setup></script>
 
 <template>
-    <div class="btn-border-gradient absolute z-40 top-4 left-4 select-none">
+    <div class="btn-border-gradient z-50 fixed top-4 left-4 select-none">
         <router-link to="/">
-            <button class="border rounded-full w-11 h-11 bg-white pr-1 flex justify-center items-center">
+            <button class="border rounded-full w-11 h-11 bg-white opacity-60 pr-1 flex justify-center items-center">
                 <svg width="10" height="17" viewBox="0 0 10 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M0.0625 8.30176C0.0625 8.14095 0.090332 7.99251 0.145996 7.85645C0.207845 7.72038 0.300618 7.59049 0.424316 7.4668L7.65137 0.397461C7.86165 0.193359 8.11523 0.0913086 8.41211 0.0913086C8.61621 0.0913086 8.79867 0.140788 8.95947 0.239746C9.12646 0.33252 9.25944 0.45931 9.3584 0.620117C9.45736 0.780924 9.50684 0.963379 9.50684 1.16748C9.50684 1.45817 9.39242 1.71794 9.16357 1.94678L2.65088 8.30176L9.16357 14.6567C9.39242 14.8856 9.50684 15.1484 9.50684 15.4453C9.50684 15.6432 9.45736 15.8226 9.3584 15.9834C9.25944 16.1504 9.12646 16.2803 8.95947 16.373C8.79867 16.472 8.61621 16.5215 8.41211 16.5215C8.11523 16.5215 7.86165 16.4163 7.65137 16.2061L0.424316 9.13672C0.300618 9.01302 0.207845 8.88314 0.145996 8.74707C0.090332 8.611 0.0625 8.46257 0.0625 8.30176Z"

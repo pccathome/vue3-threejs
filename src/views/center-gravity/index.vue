@@ -12,6 +12,7 @@ import { usePerCamera } from '../../threeBase/per-camera'
 import * as CANNON from 'cannon-es'
 import { gsap } from 'gsap'
 import backBtn from '../../components/backBtn.vue'
+import pageWrap from '../../components/pagewrap.vue'
 import loadingIco from '../../components/loadingIco.vue'
 
 // FPS
@@ -258,11 +259,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="relative h-screen w-full overflow-hidden">
+    <pageWrap>
         <div v-if="loading" class="z-10 h-screen inset-0 flex items-center justify-center">
             <loadingIco />
         </div>
         <div id="webgl" class="webgl outline-none w-full h-screen" ref="webgl"></div>
         <backBtn />
-    </div>
+    </pageWrap>
 </template>
