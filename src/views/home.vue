@@ -2,8 +2,8 @@
 import date from '../components/date.vue'
 </script>
 <template>
-    <div class="w-screen h-dvh">
-        <div class="md:w-[767px] mx-auto px-4">
+    <div class="w-full h-full">
+        <div class="md:w-[767px] mx-auto px-4 pb-24">
             <div class="mx-auto my-14 px-3 flex items-center justify-between">
                 <div>
                     <span class="text-base mr-4"> &#128406;</span>
