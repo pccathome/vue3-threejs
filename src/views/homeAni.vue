@@ -3,35 +3,36 @@ import date from '../components/date.vue'
 </script>
 <template>
     <div class="w-screen h-dvh">
-        <div class="md:w-[767px] mx-auto px-4">
-            <div class="mx-auto my-14 px-3 flex items-center justify-between">
-                <div>
-                    <span class="text-base mr-4"> &#128406;</span>
-                    <span class="font-neue_hass_roman text-[9px] antialiased uppercase text-white opacity-50">
-                        Live &nbsp; long &nbsp; and&nbsp; prosper
-                    </span>
+        <div class="md:w-[800px] mx-auto flex flex-col md:flex-row space-x-0 md:space-x-6 p-4">
+            <section class="w-full flex flex-col items-start">
+                <div class="md:h-[250px] mx-auto">
+                    <div class="m-20">
+                        <div class="mx-auto">
+                            <span class="text-base mr-3"> &#128406;</span>
+                            <span class="font-neue_hass_roman text-[9px] antialiased uppercase text-white opacity-50">
+                                Live &nbsp; long &nbsp; and&nbsp; prosper
+                            </span>
+                        </div>
+                        <ul class="flex justify-center items-center gap-20 pt-10">
+                            <li>
+                                <a href="https://twitter.com/pccathome" target="_blank">
+                                    <img class="h-5 opacity-50 hover:opacity-100" src="../assets/images/twitter.svg" />
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/pccathome/vue3-threejs" target="_blank">
+                                    <img class="h-5 opacity-50 hover:opacity-100" src="../assets/images/github.svg" />
+                                </a>
+                            </li>
+                            <li>
+                                <a href="mailto:pccathome@gmail.com">
+                                    <img class="h-5 opacity-50 hover:opacity-100" src="../assets/images/mail.svg" />
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
-                <ul class="flex items-center gap-12">
-                    <li>
-                        <a href="https://twitter.com/pccathome" target="_blank">
-                            <img class="h-4 opacity-50 hover:opacity-100" src="../assets/images/twitter.svg" />
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/pccathome/vue3-threejs" target="_blank">
-                            <img class="h-4 opacity-50 hover:opacity-100" src="../assets/images/github.svg" />
-                        </a>
-                    </li>
-                    <li>
-                        <a href="mailto:pccathome@gmail.com">
-                            <img class="h-4 opacity-50 hover:opacity-100" src="../assets/images/mail.svg" />
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <!------------------------------------------------------------->
-            <section class="grid grid-rows-1 sm:grid-cols-2 gap-6 mx-auto">
                 <div class="shape hover:border-gradient background-animate relative">
                     <router-link to="/chinese-dragon">
                         <video loop autoplay muted class="shape-inside bg-black">
@@ -53,6 +54,7 @@ import date from '../components/date.vue'
                         <date>2023.12.16</date>
                     </router-link>
                 </div>
+
                 <div class="shape hover:border-gradient background-animate relative">
                     <router-link to="/liquid-metal">
                         <div class="shape-inside bg-black">
@@ -88,6 +90,11 @@ import date from '../components/date.vue'
                         <date>2023.08.13</date>
                     </router-link>
                 </div>
+            </section>
+
+            <!------------ ------------>
+
+            <section class="w-full flex flex-col items-start text-white md:mt-40">
                 <div class="shape hover:border-gradient background-animate relative">
                     <router-link to="/reflation">
                         <div class="shape-inside bg-black">

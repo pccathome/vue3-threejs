@@ -28,14 +28,14 @@
             transform: rotate(30deg);
         }
     }
-    .head {
+    /* .head {
         @apply border border-[#2f2f2f] rounded-2xl w-full my-3;
-    }
+    } */
     .shape {
-        @apply border border-[#2f2f2f] rounded-2xl w-full my-3 cursor-pointer;
+        @apply border border-[#2f2f2f] rounded-2xl w-full h-auto cursor-pointer;
     }
     .shape-inside {
-        @apply rounded-2xl w-full;
+        @apply rounded-2xl w-full h-full;
     }
     .border-gradient {
         @apply rounded-2xl p-[1px] flex justify-center items-center bg-gradient-to-br from-[#4CAFE7] via-[#4755CE] to-[#A33AD8];
