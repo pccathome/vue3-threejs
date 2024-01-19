@@ -39,7 +39,7 @@ import dataItems from '../data/items.json'
                     class="shape hover:border-gradient background-animate relative"
                 >
                     <router-link :to="`${item.link}`">
-                        <video loop autoplay muted class="shape-inside">
+                        <video playsinline loop autoplay muted class="shape-inside">
                             <source :src="item.mp4" type="video/mp4" />
                         </video>
                         <dateInfo>{{ item.date }}</dateInfo>

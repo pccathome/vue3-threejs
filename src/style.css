@@ -35,7 +35,7 @@
         @apply border border-[#2f2f2f] rounded-2xl w-full  cursor-pointer;
     }
     .shape-inside {
-        @apply rounded-2xl object-fill w-full h-full;
+        @apply rounded-2xl object-fill overflow-clip w-full h-72 aspect-auto;
     }
     .border-gradient {
         @apply rounded-2xl p-[1px] flex justify-center items-center bg-gradient-to-br from-[#4CAFE7] via-[#4755CE] to-[#A33AD8];
