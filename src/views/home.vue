@@ -32,14 +32,16 @@ import dataItems from '../data/items.json'
                 </ul>
             </div>
 
-            <section class="grid grid-rows-1 sm:grid-cols-2 gap-6 mx-auto">
-                <div
-                    v-for="(item, index) in dataItems"
-                    :key="index"
-                    class="shape hover:border-gradient background-animate relative"
-                >
+            <section class="grid grid-rows-1 md:grid-cols-2 gap-6 mx-auto">
+                <div v-for="(item, index) in dataItems" :key="index" class="relative">
                     <router-link :to="`${item.link}`">
-                        <video playsinline loop autoplay muted class="shape-inside">
+                        <video
+                            playsinline
+                            loop
+                            autoplay
+                            muted
+                            class="shape-inside hover:border-gradient background-animate"
+                        >
                             <source :src="item.mp4" type="video/mp4" />
                         </video>
                         <dateInfo>{{ item.date }}</dateInfo>

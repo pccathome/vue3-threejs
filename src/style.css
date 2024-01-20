@@ -31,17 +31,17 @@
     /* .head {
         @apply border border-[#2f2f2f] rounded-2xl w-full my-3;
     } */
-    .shape {
-        @apply border border-[#2f2f2f] rounded-2xl w-full  cursor-pointer;
-    }
+    /* .shape {
+        @apply border-2 border-[#2f2f2f] rounded-2xl w-full  cursor-pointer;
+    } */
     .shape-inside {
-        @apply rounded-2xl object-fill overflow-clip w-full h-72 aspect-auto;
+        @apply rounded-2xl cursor-pointer object-fill overflow-clip aspect-auto;
     }
     .border-gradient {
-        @apply rounded-2xl p-[1px] flex justify-center items-center bg-gradient-to-br from-[#4CAFE7] via-[#4755CE] to-[#A33AD8];
+        @apply rounded-2xl p-0.5 w-fit flex justify-center items-center bg-gradient-to-br from-[#4CAFE7] via-[#4755CE] to-[#A33AD8];
     }
     .btn-border-gradient {
-        @apply rounded-full p-[1px] flex justify-center items-center bg-gradient-to-br from-[#4CAFE7] via-[#4755CE] to-[#A33AD8];
+        @apply rounded-full p-0.5 flex justify-center items-center bg-gradient-to-br from-[#4CAFE7] via-[#4755CE] to-[#A33AD8];
     }
     .background-animate {
         background-size: 300%;
