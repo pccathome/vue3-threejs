@@ -114,17 +114,16 @@ const hdr = new RGBELoader(loadingManager).load('/texture/empty_warehouse_01_2k.
     hdr.mapping = THREE.EquirectangularReflectionMapping
 })
 const material = new THREE.MeshPhysicalMaterial({
-    // color: '#000000',
-    transmission: 1.4,
+    transmission: 1.27,
     envMap: hdr,
-    envMapIntensity: 1.5,
-    clearcoat: 0.3,
-    clearcoatRoughness: 0.25,
-    ior: 1.25,
-    roughness: 0.09,
-    metalness: 0,
-    thickness: 1.3,
-    side: THREE.DoubleSide
+    envMapIntensity: 9.5,
+    // clearcoat: 2.5,
+    // clearcoatRoughness: 6.05,
+    ior: 1.3,
+    roughness: 0.0,
+    metalness: 0.1,
+    thickness: 1.2
+    // side: THREE.DoubleSide
 })
 
 const sphereMeshes = []
