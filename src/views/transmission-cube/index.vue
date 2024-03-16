@@ -123,12 +123,12 @@ hdrEquirect.load('empty_warehouse_01_2k.hdr', (texture) => {
         cubeMesh = gltf.scene
         cubeChild = cubeMesh.getObjectByName('cube')
         cubeChild.material = new THREE.MeshPhysicalMaterial({
-            transmission: 1.1,
+            transmission: 1.07,
             envMap: texture,
             envMapIntensity: 5.5,
-            ior: 1.3,
+            ior: 1.4,
             roughness: 0,
-            metalness: 0,
+            metalness: 0.05,
             thickness: 1.2,
             side: THREE.DoubleSide
         })
