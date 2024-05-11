@@ -82,7 +82,7 @@ const loadingManager = new THREE.LoadingManager(
 // Font Loader
 const textLoader = new FontLoader()
 let text = null
-textLoader.load('font/Roboto_Bold.json', (font) => {
+textLoader.load('/font/Roboto_Bold.json', (font) => {
     const textGeometry = new TextGeometry('HELLO WORLD', {
         font: font,
         size: 1.5,
