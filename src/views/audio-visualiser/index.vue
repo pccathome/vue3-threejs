@@ -176,7 +176,6 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-   
     <pageWrap>
         <div class="outline-none w-full h-full absolute z-0" ref="webgl"></div>
         <div class="h-screen inset-0 flex items-center justify-center mt-28 sm:mt-0">
@@ -204,5 +203,4 @@ onBeforeUnmount(() => {
             </template>
         </footerInfo>
     </pageWrap>
-
 </template>

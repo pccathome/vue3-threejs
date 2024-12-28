@@ -5,12 +5,7 @@
         "mp4": "/video/cdg_2.mp4",
         "date": "2024.01.10"
     },
-    {
-        "id": 9,
-        "link": "/audio-visualiser",
-        "mp4": "/video/audio-v.mp4",
-        "date": "2023.12.16"
-    },
+
     {
         "id": 8,
         "link": "/liquid-metal",
